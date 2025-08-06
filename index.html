@@ -1,113 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SAP VM SKU Recommender</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link rel="stylesheet" href="style.css">
-</head>
-
-<body class="bg-gray-900 text-white h-screen flex flex-col">
-
-    <!-- Updated Header -->
-<header class="bg-gray-800 p-4 shadow-md">
-  <div>
-    <!-- ☰ + Heading -->
-    <div class="flex items-center gap-4 mt-1">
-      <button id="sidebarToggle" class="text-white text-3xl focus:outline-none mt-2">
-        ☰
-      </button>
-      <h1 class="text-3xl font-semibold text-white ">SAP VM SKU Recommender</h1>
-    </div>
-
-    <!-- Toggle under heading with slight indent -->
-    <div class="toggle-switch-container mt-1 ml-10 max-w-xs w-full ">
-      <input type="radio" id="mode-normal" name="mode-toggle" value="Normal" checked>
-      <label for="mode-normal">Normal</label>
-      <input type="radio" id="mode-rag" name="mode-toggle" value="RAG">
-      <label for="mode-rag">RAG</label>
-    </div>
-  </div>
-</header>
-<!-- Sidebar -->
-<aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-gray-800 text-white shadow-lg transform -translate-x-full transition-transform duration-300 z-40">
-  <div class="p-4 font-bold text-xl border-b border-gray-700">Menu</div>
-  <div class="p-4 space-y-4">
-    <button id="new-chat" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">
-      + New Chat
-    </button>
-
-    <div class="mt-4">
-      <h3 class="text-sm text-gray-400 mb-1">Chat History</h3>
-      <ul id="chat-history" class="space-y-1 text-sm">
-        <!-- Chat items will be injected here -->
-      </ul>
-    </div>
-
-    <nav class="pt-4 space-y-2 border-t border-gray-700">
-      <a href="#" class="block hover:text-blue-400">Settings</a>
-      <a href="#" class="block hover:text-blue-400">Help</a>
-    </nav>
-  </div>
-</aside>
-
-  
-  <!-- Overlay for mobile -->
-  <div id="sidebarOverlay" class="fixed inset-0 bg-black opacity-50 hidden z-30"></div>
-
-
-  <!-- Chat Display -->
-  <main id="chat-area" class="flex-1 overflow-y-auto bg-gray-900 px-4 py-6 flex flex-col space-y-4 relative">
-    <div id="welcome-message" class="absolute inset-0 flex items-center justify-center pointer-events-none">
-      <div class="text-center text-gray-400 leading-relaxed px-4">
-        <p class="text-center font-bold text-2xl text-white mb-1 leading-[3rem]">
-          Hello! I am the SAP VM SKU Recommendation Assistant.
-        </p>
-        <p class="text-gray-400 text-lg max-w-2xl mx-auto">
-          I can help you find the best Azure Intel VM SKU based on your SAP workload requirements.
-        </p>
-      </div>
-    </div>
-  </main>
-<!-- Input Section -->
-<form id="input-form" class="bg-gray-900 p-4">
-  <div class="relative max-w-4xl mx-auto mb-3">
-    <textarea
-      id="user-input"
-      rows="1"
-      placeholder="Ask something about SAP VM..."
-      autocomplete="off"
-      class="w-full resize-none bg-gray-800 text-white placeholder-gray-400 px-4 py-4 pr-28 rounded-[1.5rem] border border-gray-600 focus:outline-none text-base leading-[1.5rem] overflow-hidden"
-      style="height: 64px; max-height: 200px;"
-    ></textarea>
-
-    <!-- File Upload Button (just left of submit button) -->
-    <label
-      for="file-upload"
-      class="absolute right-14 top-1/2 -translate-y-[60%] cursor-pointer text-gray-400 hover:text-white transition"
-      title="Attach file"
-    >
-      <i class="fas fa-paperclip text-lg"></i>
-    </label>
-    <input
-      type="file"
-      id="file-upload"
-      class="hidden"
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SAP VM SKU Recommender</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-
-    <!-- Submit Button -->
-    <button
-      type="submit"
-      id="submit-btn"
-      class="absolute right-4 top-1/2 -translate-y-[60%]  text-white p-3 rounded-full shadow-lg transition"
-      aria-label="Submit"
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body class="bg-gray-900 text-white h-screen flex">
+    <!-- Sidebar -->
+    <aside
+      id="sidebar"
+      class="fixed top-0 left-0 h-full w-64 bg-gray-800 text-white shadow-lg transform -translate-x-full transition-transform duration-300 z-40"
     >
-      <i class="fas fa-paper-plane"></i>
-    </button>
-  </div>
-</form>
- <script src="scripts.js"></script>
-</body>
+      <div class="p-4 font-bold text-xl border-b border-gray-700">Menu</div>
+      <div class="p-4 space-y-4">
+        <button
+          id="new-chat"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+        >
+          + New Chat
+        </button>
+
+        <div class="mt-4">
+          <h3 class="text-sm text-gray-400 mb-1">Chat History</h3>
+          <ul id="chat-history" class="space-y-1 text-sm">
+            <!-- Chat items will be injected here -->
+          </ul>
+        </div>
+
+        <nav class="pt-4 space-y-2 border-t border-gray-700">
+          <a href="#" class="block hover:text-blue-400">Settings</a>
+          <a href="#" class="block hover:text-blue-400">Help</a>
+          <a href="#" class="block hover:text-blue-400">About</a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div
+      id="main-content"
+      class="flex-1 flex flex-col transition-all duration-300"
+    >
+      <!-- Header -->
+      <header class="bg-gray-800 p-4 shadow-md">
+        <div>
+          <div class="flex items-center gap-4 mt-1">
+            <button
+              id="sidebarToggle"
+              class="text-white text-3xl focus:outline-none mt-2"
+            >
+              ☰
+            </button>
+            <h1 class="text-3xl font-semibold text-white">
+              SAP VM SKU Recommender
+            </h1>
+          </div>
+
+          <div class="toggle-switch-container mt-1 ml-10 max-w-xs w-full">
+            <input
+              type="radio"
+              id="mode-normal"
+              name="mode-toggle"
+              value="Normal"
+              checked
+            />
+            <label for="mode-normal">Normal</label>
+            <input type="radio" id="mode-rag" name="mode-toggle" value="RAG" />
+            <label for="mode-rag">RAG</label>
+          </div>
+        </div>
+      </header>
+
+      <!-- Chat Area -->
+      <main
+        id="chat-area"
+        class="flex-1 overflow-y-auto bg-gray-900 px-4 py-6 flex flex-col space-y-4 relative"
+      >
+        <div
+          id="welcome-message"
+          class="absolute inset-0 flex items-center justify-center pointer-events-none"
+        >
+          <div class="text-center text-gray-400 leading-relaxed px-4">
+            <p
+              class="text-center font-bold text-2xl text-white mb-1 leading-[3rem]"
+            >
+              Hello! I am the SAP VM SKU Recommendation Assistant.
+            </p>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+              I can help you find the best Azure Intel VM SKU based on your SAP
+              workload requirements.
+            </p>
+          </div>
+        </div>
+      </main>
+
+      <!-- Input Form -->
+      <form id="input-form" class="bg-gray-900 p-4">
+        <div class="relative max-w-4xl mx-auto mb-3">
+          <textarea
+            id="user-input"
+            rows="1"
+            placeholder="Ask something about SAP VM..."
+            autocomplete="off"
+            class="w-full resize-none bg-gray-800 text-white placeholder-gray-400 px-4 py-4 pr-28 rounded-[1.5rem] border border-gray-600 focus:outline-none text-base leading-[1.5rem] overflow-hidden"
+            style="height: 64px; max-height: 200px"
+          ></textarea>
+
+          <label
+            for="file-upload"
+            class="absolute right-14 top-1/2 -translate-y-[60%] cursor-pointer text-gray-400 hover:text-white transition"
+            title="Attach file"
+          >
+            <i class="fas fa-paperclip text-lg"></i>
+          </label>
+          <input type="file" id="file-upload" class="hidden" />
+
+          <button
+            type="submit"
+            id="submit-btn"
+            class="absolute right-4 top-1/2 -translate-y-[60%] text-white p-3 rounded-full shadow-lg transition"
+            aria-label="Submit"
+          >
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Overlay -->
+    <div
+      id="sidebarOverlay"
+      class="fixed inset-0 bg-black opacity-50 hidden z-30"
+    ></div>
+
+     <script src="scripts.js"></script>
+
+  </body>
 </html>
